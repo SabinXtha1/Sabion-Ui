@@ -19,7 +19,7 @@ export default function Home() {
 
   useEffect(() => {
     // Fallback to a default value if environment variable is not set
-    setSrcLink(`${fullUrl}/sabin/dark-button.json` || 'my-components');
+    setSrcLink(`${fullUrl}sabin/dark-button.json` || 'my-components');
   }, []);
 
   const handleCopy = async () => {
