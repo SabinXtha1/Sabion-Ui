@@ -1,60 +1,155 @@
+'use client'
+import DarkButton from "@/components/sabion-ui/dark-hero-button";
+import { Copy, Check } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [srcLink, setSrcLink] = useState('');
+  const [copied, setCopied] = useState(false);
+    const pathname = usePathname()
+  
+  // Get full URL
+  const fullUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}${pathname}` 
+    : '';
+    console.log(fullUrl)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    // Fallback to a default value if environment variable is not set
+    setSrcLink(`${fullUrl}/sabin/dark-button.json` || 'my-components');
+  }, []);
+
+  const handleCopy = async () => {
+    const textToCopy = `npx shadcn add ${srcLink}`;
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setCopied(true);
+      // Reset the copied state after 2 seconds
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = textToCopy;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
+
+  return (
+    <div className="font-sans min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+      <main className="container mx-auto px-4 py-16 max-w-6xl">
+        <div className="flex flex-col items-center text-center gap-8 mb-16">
+          <Image
+            className="dark:invert mb-8"
+            src="/next.svg"
+            alt="Next.js logo"
+            width={220}
+            height={48}
+            priority
+          />
+          <h1 className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            Build Better. Build Faster.
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl">
+            Get started with our modern UI components library for Next.js applications
+          </p>
+
+          <div className="flex gap-6 items-center flex-col sm:flex-row mt-8">
+            <DarkButton>
+              Install My Components
+            </DarkButton>
+            
+            <button
+              onClick={handleCopy}
+              disabled={!srcLink}
+              className="flex gap-3 items-center px-6 py-3 bg-gray-800 hover:bg-gray-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-green-400 rounded-xl transition-all duration-200 font-mono text-sm shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+              aria-label="Copy installation command"
+            >
+              <span className="select-all">
+                npx shadcn add {srcLink || 'loading...'}
+              </span>
+              {copied ? (
+                <Check className="w-4 h-4 text-green-400" />
+              ) : (
+                <Copy className="w-4 h-4 text-white" />
+              )}
+            </button>
+            
+            {copied && (
+              <div className="absolute mt-16 px-3 py-1 bg-green-600 text-white text-sm rounded-lg shadow-lg animate-fade-in">
+                Copied to clipboard!
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+              Quick Start
+            </h3>
+            <ol className="font-mono list-decimal list-inside space-y-3 text-sm text-gray-600 dark:text-gray-300">
+              <li className="tracking-tight">
+                Edit{' '}
+                <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                  src/app/page.tsx
+                </code>
+              </li>
+              <li className="tracking-tight">
+                Save and see your changes instantly
+              </li>
+              <li className="tracking-tight">
+                Deploy with Vercel for production
+              </li>
+            </ol>
+          </div>
+
+          <div className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+              Features
+            </h3>
+            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+              <li>🎨 Modern UI components</li>
+              <li>🌙 Dark mode support</li>
+              <li>📱 Responsive design</li>
+              <li>⚡ TypeScript ready</li>
+            </ul>
+          </div>
+
+          <div className="p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300 md:col-span-2 lg:col-span-1">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+              Documentation
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+              Comprehensive guides and API references to help you build amazing applications.
+            </p>
+            <a
+              href="/docs"
+              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
+            >
+              View Documentation →
+            </a>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+
+      <footer className="container mx-auto px-4 py-8 flex gap-6 flex-wrap items-center justify-center border-t border-gray-200 dark:border-gray-800">
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          href="https://nextjs.org/learn"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -68,8 +163,8 @@ export default function Home() {
           Learn
         </a>
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          href="https://vercel.com/templates"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -83,8 +178,8 @@ export default function Home() {
           Examples
         </a>
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+          href="https://nextjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
