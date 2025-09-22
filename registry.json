@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "Sabion",
+  "homepage": "https://sabion.vercel.app",
+  "items": [
+    {
+     "name":"bouncy-text",
+     "type": "registry:block",
+     "title": "Bouncy Text",
+     "description": "A simple bouncy text component.",
+     "files": [
+       {
+         "path": "src/registry/default/BouncyText/BounceText.tsx",
+         "type": "registry:component"
+       },
+       {
+         "path": "src/registry/default/BouncyText/BounceText.css",
+         "type": "registry:style"
+       }
+     ]
+    }
+  ]
+}
