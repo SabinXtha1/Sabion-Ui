@@ -13,7 +13,7 @@
     {
       "path": "src/registry/default/BouncyText/BounceText.css",
       "content": ".jello:hover {\r\n  background-clip: text;\r\n  -webkit-background-clip: text;\r\n  -webkit-text-fill-color: transparent;\r\n  background-color: #03e6ff;\r\n  animation: 0.9s both jello-vertical;\r\n}\r\n\r\n@keyframes jello-vertical {\r\n  0%, 100% {\r\n    transform: scale3d(1, 1, 1);\r\n  }\r\n  30% {\r\n    transform: scale3d(.75, 1.25, 1);\r\n  }\r\n  40% {\r\n    transform: scale3d(1.25, .75, 1);\r\n  }\r\n  50% {\r\n    transform: scale3d(.85, 1.15, 1);\r\n  }\r\n  65% {\r\n    transform: scale3d(1.05, .95, 1);\r\n  }\r\n  75% {\r\n    transform: scale3d(.95, 1.05, 1);\r\n  }\r\n}",
-      "type": "registry:component"
+      "type": "registry:item"
     }
   ]
 }

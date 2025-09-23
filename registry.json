@@ -15,7 +15,7 @@
        },
        {
          "path": "src/registry/default/BouncyText/BounceText.css",
-         "type": "registry:style"
+         "type": "registry:item"
        }
      ]
     }
